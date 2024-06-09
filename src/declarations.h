@@ -1,0 +1,20 @@
+void setupStepper();
+bool rotateStepper(float angle);
+void rotateStepperDiff(float diffAngle,int speed);
+void rotateStepperWhile(bool (*isKeepRotating)(),int (*getSpeed)(),bool (*isPositiveDirection)());
+float GetCurrentAngle();
+void setup_ICM20948();
+float getYaw();
+//#define ANGLE_BUF_SIZE 5
+//void resetAngleSmooth();
+//float getAngleSmooth(float angle);
+void setupButtons();
+void readButtons();
+bool IsLeftPedalOn();
+bool IsRightPedalOn();
+bool IsPedals();
+bool IsBothPedals();
+bool IsAutoSearch();
+bool IsKeepDirection();
+float GetSpeed();
+float GetAngle();
