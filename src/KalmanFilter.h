@@ -3,7 +3,8 @@
 
 class KalmanFilter {
 public:
-    KalmanFilter(float process_noise, float sensor_noise, float estimated_error, float initial_value);
+    KalmanFilter(float process_noise, float sensor_noise, float initial_value);
+    void reset(float initial_value);
     float update(float measurement);
 
 private:

@@ -5,7 +5,7 @@
 #include "declarations.h"
 
 Adafruit_ICM20948 icm;
-uint16_t measurement_delay_us = 65535; // Delay between measurements for testing
+//uint16_t measurement_delay_us = 65535; // Delay between measurements for testing
 // For SPI mode, we need a CS pin
 #define ICM_CS 10
 // For software-SPI mode we need SCK/MOSI/MISO pins
@@ -65,7 +65,7 @@ void setup_ICM20948()
     break;
   }
 
-  //  icm.setAccelRateDivisor(4095);
+  icm.setAccelRateDivisor(1);
   uint16_t accel_divisor = icm.getAccelRateDivisor();
   float accel_rate = 1125 / (1.0 + accel_divisor);
 
@@ -74,7 +74,7 @@ void setup_ICM20948()
   Serial.print("Accelerometer data rate (Hz) is approximately: ");
   Serial.println(accel_rate);
 
-  //  icm.setGyroRateDivisor(255);
+  icm.setGyroRateDivisor(1);
   uint8_t gyro_divisor = icm.getGyroRateDivisor();
   float gyro_rate = 1100 / (1.0 + gyro_divisor);
 

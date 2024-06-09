@@ -18,7 +18,7 @@ int maxSpeed = 1500;
 CurMode curMode = ManualMode;
 
 void setup(void) {
-  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial)
     delay(10); // will pause Zero, Leonardo, etc until serial console opens
 
@@ -64,7 +64,7 @@ bool isPositiveDirectionAutoSearch()
     isPositiveDir = false;
   return isPositiveDir;
 }
-KalmanFilter kalmanFilter(1.e-1,5,1,0);
+KalmanFilter kalmanFilter(1.e-2,1505,0);
 float curCorrectionAngle = 0;
 float calcCorrectionAngle()
 {
@@ -89,10 +89,10 @@ bool isKeepRotationKeepDirection()
 }
 int getSpeedKeepDirection()
 {
-  if(fabs(calcCorrectionAngle())<3)
+  if(fabs(calcCorrectionAngle())<1)
     return 0;
   //Serial.printf("%f \n",curCorrectionAngle);
-  return maxSpeed;
+  return 100;
 }
 bool isPositiveDirectionKeepDirection()
 {
@@ -115,10 +115,10 @@ void loop() {
   {
     Serial.println("KeepDirection");
     curMode = KeepDirectionMode;
-    //resetAngleSmooth();
     curTargetYawAngle = getYaw();
     curStepperYawDelta = curTargetYawAngle - GetCurrentAngle();
     curTargetStepperAngle = GetCurrentAngle();
+    kalmanFilter.reset(curTargetYawAngle);
     rotateStepperWhile(isKeepRotationKeepDirection,getSpeedKeepDirection,isPositiveDirectionKeepDirection);
   }
   auto crTime = esp_timer_get_time();
@@ -137,53 +137,5 @@ void loop() {
     }
   }
   rotateStepperWhile(isKeepRotationPedal,getSpeed,isPositiveDirectionPedal);
-  /*readButtons();
-  rotateStepper(10);
-  auto isLeftPedalOn = IsLeftPedalOn();
-  auto isRightPedalOn = IsRightPedalOn();
-  auto diffAngle = 5;
-  auto speed = (1-GetSpeed()) * 1500;
-  if(isLeftPedalOn && !isRightPedalOn)
-    rotateStepperDiff(1 * diffAngle,(int)speed);
-  else if(!isLeftPedalOn && isRightPedalOn)
-    rotateStepperDiff(-1 * diffAngle,(int)speed); */
- /* auto yaw = loop_ICM20948();
-  digitalWrite (LED_BUILTIN, HIGH);
-  rotateStepper(yaw);
-  digitalWrite (LED_BUILTIN, LOW); */
-
-  /* Display the results (acceleration is measured in m/s^2) */
-/*  Serial.print("\t\tGyro X: ");
-  Serial.print(gyro.gyro.x);
-  Serial.print(" \tY: ");
-  Serial.print(gyro.gyro.y);
-  Serial.print(" \tZ: ");
-  Serial.print(gyro.gyro.z);
-  Serial.println(" radians/s ");*/
-  //Serial.println();
-
-  delay(100);
-
-  //  Serial.print(temp.temperature);
-  //
-  //  Serial.print(",");
-  //
-  //  Serial.print(accel.acceleration.x);
-  //  Serial.print(","); Serial.print(accel.acceleration.y);
-  //  Serial.print(","); Serial.print(accel.acceleration.z);
-  //
-  //  Serial.print(",");
-  //  Serial.print(gyro.gyro.x);
-  //  Serial.print(","); Serial.print(gyro.gyro.y);
-  //  Serial.print(","); Serial.print(gyro.gyro.z);
-  //
-  //  Serial.print(",");
-  //  Serial.print(mag.magnetic.x);
-  //  Serial.print(","); Serial.print(mag.magnetic.y);
-  //  Serial.print(","); Serial.print(mag.magnetic.z);
-
-  //  Serial.println();
-  //
-  //  delayMicroseconds(measurement_delay_us);
 }
 

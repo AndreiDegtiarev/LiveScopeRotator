@@ -1,12 +1,18 @@
 #include "KalmanFilter.h"
 #include <cmath>
 
-KalmanFilter::KalmanFilter(float process_noise, float sensor_noise, float estimated_error, float initial_value) {
+KalmanFilter::KalmanFilter(float process_noise, float sensor_noise,  float initial_value) {
     q = process_noise;
     r = sensor_noise;
-    p = estimated_error;
+    p = 0;
     x = initial_value;
     k = 0;
+}
+void KalmanFilter::reset(float initial_value)
+{
+    k = 0;
+    p= 0;
+    x = initial_value;
 }
 
 float KalmanFilter::update(float measurement) {
